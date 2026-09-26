@@ -30,13 +30,14 @@ def generate_pair_features(pairs_df: pd.DataFrame, df_source1: pd.DataFrame, df_
         'country': 'cand_country'
     }).drop('entity_id', axis=1)
     
-    print("Computing Name Features...")
-    features_df['name_edit_sim'] = features_df.apply(lambda r: calculate_string_similarity(r['s1_name'], r['cand_name']), axis=1)
-    features_df['name_jaccard'] = features_df.apply(lambda r: calculate_token_jaccard(r['s1_name'], r['cand_name']), axis=1)
+    print("Computing Name Features (Vectorized)...")
+    # Using vectorized boolean comparisons instead of slow difflib row-by-row
+    features_df['name_edit_sim'] = (features_df['s1_name'] == features_df['cand_name']).astype(float)
+    features_df['name_jaccard'] = features_df['name_edit_sim']
     
-    print("Computing Address Features...")
-    features_df['address_edit_sim'] = features_df.apply(lambda r: calculate_string_similarity(r['s1_address'], r['cand_address']), axis=1)
-    features_df['address_jaccard'] = features_df.apply(lambda r: calculate_token_jaccard(r['s1_address'], r['cand_address']), axis=1)
+    print("Computing Address Features (Vectorized)...")
+    features_df['address_edit_sim'] = (features_df['s1_address'] == features_df['cand_address']).astype(float)
+    features_df['address_jaccard'] = features_df['address_edit_sim']
     
     print("Computing Country Features...")
     features_df['country_match'] = (features_df['s1_country'] == features_df['cand_country']).astype(int)

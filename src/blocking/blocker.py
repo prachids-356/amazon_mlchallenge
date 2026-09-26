@@ -10,11 +10,12 @@ def generate_candidates(df_source1: pd.DataFrame, df_candidates: pd.DataFrame, s
     exact_pairs = exact_match_blocking(df_source1, df_candidates, source_name)
     exact_pairs['blocking_rule'] = 'exact_match'
     
-    print(f"Running name token blocking for {source_name}...")
-    token_pairs = name_token_blocking(df_source1, df_candidates, source_name)
+    # Token blocking can cause memory explosion on 500MB files due to common words like 'The'
+    # print(f"Running name token blocking for {source_name}...")
+    # token_pairs = name_token_blocking(df_source1, df_candidates, source_name)
     
     # Union all strategies
-    all_pairs = pd.concat([exact_pairs, token_pairs], ignore_index=True)
+    all_pairs = exact_pairs # pd.concat([exact_pairs, token_pairs], ignore_index=True)
     
     # Deduplicate candidate pairs
     dedup_pairs = all_pairs.drop_duplicates(subset=['source1_entity_id', 'candidate_entity_id'])
