@@ -12,6 +12,7 @@ from src.features.pair_features import generate_pair_features
 from src.models.labeling import create_labels
 from src.models.matcher import EntityMatcher
 from src.models.threshold import tune_threshold, apply_threshold
+from src.evaluation.metrics import calculate_binary_metrics
 from src.output.writer import format_predictions_for_submission
 from src import config
 
@@ -72,6 +73,16 @@ def run_end_to_end():
         val_labels['match_prob'] = matcher.predict_proba(val_labels)
         best_thresh, best_f05 = tune_threshold(val_labels, 'match_prob')
         print(f"Optimal Decision Threshold learned: {best_thresh:.3f} with Validation F0.5 = {best_f05:.3f}")
+        val_predictions = (val_labels['match_prob'] >= best_thresh).astype(int)
+        validation_metrics = calculate_binary_metrics(val_labels['label'], val_predictions)
+        print(
+            "Validation metrics: "
+            f"accuracy={validation_metrics['accuracy']:.3f}, "
+            f"precision={validation_metrics['precision']:.3f}, "
+            f"recall={validation_metrics['recall']:.3f}, "
+            f"F1={validation_metrics['f1']:.3f}, "
+            f"F0.5={validation_metrics['f05']:.3f}"
+        )
     else:
         best_thresh = 0.5
         print("Validation set empty, defaulting threshold to 0.5")

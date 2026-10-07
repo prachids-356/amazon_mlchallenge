@@ -1,0 +1,16 @@
+# Dataset files (Too large for GitHub)
+data/
+*.tsv
+!output/*.tsv
+
+# Logs and OS files
+output_log.txt
+__MACOSX/
+.DS_Store
+
+# Python caches
+__pycache__/
+*.pyc
+
+# Zip files
+*.zip
