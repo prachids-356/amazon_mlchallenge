@@ -65,6 +65,7 @@ Standard text similarity libraries (like Python's `difflib.SequenceMatcher`) eva
 1. Place your TSV files in the `data/train/` and `data/test/` folders.
 2. Install dependencies: `pip install -r requirements.txt`
 3. Run the pipeline: `python src/pipeline.py`
+4. Open the showcase dashboard: `streamlit run app.py`
 
 Outputs will be correctly formatted handling Singletons and duplicate removals, ready for submission in `output/`.
 
