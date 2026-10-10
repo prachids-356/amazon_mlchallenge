@@ -1,6 +1,7 @@
 # Dataset files (too large for GitHub)
 data/
 *.tsv
+!demo/*.tsv
 
 # Python
 __pycache__/

@@ -1,0 +1,14 @@
+{
+  "evaluation_type": "sample validation",
+  "sample_size_per_source": 1000,
+  "validation_entities": 200,
+  "training_candidate_pairs": 3110,
+  "validation_candidate_pairs": 735,
+  "threshold": 0.79,
+  "tuned_macro_f05": 0.9928,
+  "accuracy": 0.9946,
+  "precision": 1.0,
+  "recall": 0.9863,
+  "f1": 0.9931,
+  "f05": 0.9972
+}
