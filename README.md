@@ -66,3 +66,17 @@ Standard text similarity libraries (like Python's `difflib.SequenceMatcher`) eva
 3. Run the pipeline: `python src/pipeline.py`
 
 Outputs will be correctly formatted handling Singletons and duplicate removals, ready for submission in `output/`.
+
+## Evaluation Results
+
+The pipeline creates a validation split from 20% of the training Source 1 entities. It prints the following metrics after training:
+
+```text
+Validation metrics: accuracy=..., precision=..., recall=..., F1=..., F0.5=...
+```
+
+Use the values printed by this run in a project report or LinkedIn post. Report them as **validation metrics**, since the test files do not include public labels.
+
+For this challenge, **F0.5 is the primary metric** because it gives more weight to precision and penalizes incorrect business merges. Accuracy is a secondary pair-level metric and should not be presented as the overall challenge score.
+
+The repository also includes a sample benchmark under `benchmarks/` showing candidate-generation and feature-generation timing. Those runtime measurements are separate from model quality metrics.
