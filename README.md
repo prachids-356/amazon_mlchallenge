@@ -88,8 +88,8 @@ The recorded sample benchmark uses the first 200 training rows from each source:
 | Measurement | Result |
 |---|---:|
 | Candidate pairs | 47 |
-| Candidate-generation time | 1.00 second |
-| Feature-generation time | 0.19 seconds |
+| Candidate-generation time | 0.25 seconds |
+| Feature-generation time | 0.04 seconds |
 | Feature rows | 47 |
 
 These are reproducible sample measurements, not full-dataset accuracy or full-dataset runtime.

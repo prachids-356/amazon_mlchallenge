@@ -10,6 +10,16 @@ import streamlit as st
 ROOT = Path(__file__).resolve().parent
 SUMMARY_PATH = ROOT / "benchmarks" / "benchmark_summary.json"
 RESULTS_PATH = ROOT / "output" / "matching_results.tsv"
+REQUIRED_DATA_FILES = [
+    ROOT / "data" / "train" / "train_source1.tsv",
+    ROOT / "data" / "train" / "train_source2.tsv",
+    ROOT / "data" / "train" / "train_source3.tsv",
+    ROOT / "data" / "train" / "train_ground_truth.tsv",
+    ROOT / "data" / "test" / "test_source1.tsv",
+    ROOT / "data" / "test" / "test_source2.tsv",
+    ROOT / "data" / "test" / "test_source3.tsv",
+]
+DATA_AVAILABLE = all(path.exists() for path in REQUIRED_DATA_FILES)
 
 
 st.set_page_config(page_title="Entity Resolution Lab", page_icon="ER", layout="wide")
@@ -31,12 +41,18 @@ middle.metric("Candidate generation", f"{summary['candidate_generation_time_seco
 right.metric("Feature generation", f"{summary['feature_generation_time_seconds']:.2f}s" if summary else "-")
 
 st.subheader("Evaluation")
-st.info(
-    "The challenge metric is validation F0.5. Run the pipeline to calculate validation accuracy, "
-    "precision, recall, F1, and F0.5 on the held-out training split."
-)
+if DATA_AVAILABLE:
+    st.info(
+        "The challenge metric is validation F0.5. Run the pipeline to calculate validation accuracy, "
+        "precision, recall, F1, and F0.5 on the held-out training split."
+    )
+else:
+    st.info(
+        "This public demo includes the code and benchmark results, but not the private challenge datasets. "
+        "Add the required files under data/ to run matching locally."
+    )
 
-if st.button("Run full pipeline", type="primary"):
+if st.button("Run full pipeline", type="primary", disabled=not DATA_AVAILABLE):
     with st.status("Running pipeline...", expanded=True) as status:
         process = subprocess.run(
             [sys.executable, str(ROOT / "src" / "pipeline.py")],
@@ -56,7 +72,7 @@ if RESULTS_PATH.exists():
     st.write(f"{len(results):,} Source 1 entities in the latest output")
     st.dataframe(results.head(100), width="stretch")
 else:
-    st.warning("No matching output exists yet. Run the pipeline after placing the challenge data under data/.")
+    st.caption("Matching output is generated locally from the challenge data and is not included in this public demo.")
 
 st.subheader("Blocking rules")
 st.write("Exact name/address, first normalized name token, and country + name-prefix + address-token blocking.")

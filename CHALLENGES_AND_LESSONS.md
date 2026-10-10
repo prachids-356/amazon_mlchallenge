@@ -44,8 +44,8 @@ The benchmark itself also needed debugging. It initially reloaded and normalized
 
 The current recorded 200-row sample produced 47 candidate pairs:
 
-- candidate generation: 1.00 second
-- feature generation: 0.19 seconds
+- candidate generation: 0.25 seconds
+- feature generation: 0.04 seconds
 
 These are sample measurements, not a claim about full-dataset runtime.
 
