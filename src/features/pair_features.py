@@ -51,7 +51,12 @@ def _compute_series_similarity(left_values, right_values, metric_fn, exact_flags
     return pd.Series(results, index=left_values.index)
 
 
-def generate_pair_features(pairs_df: pd.DataFrame, df_source1: pd.DataFrame, df_candidates: pd.DataFrame) -> pd.DataFrame:
+def generate_pair_features(
+    pairs_df: pd.DataFrame,
+    df_source1: pd.DataFrame,
+    df_candidates: pd.DataFrame,
+    chunk_size: int = 200_000,
+) -> pd.DataFrame:
     if pairs_df.empty:
         return pairs_df
 
@@ -72,10 +77,10 @@ def generate_pair_features(pairs_df: pd.DataFrame, df_source1: pd.DataFrame, df_
     name_exact = (s1_name == cand_name)
     features_df['name_exact'] = name_exact.astype(float)
     features_df['name_edit_sim'] = _compute_series_similarity(
-        s1_name, cand_name, fast_char_bigram_jaccard, exact_flags=name_exact, chunk_size=200_000
+        s1_name, cand_name, fast_char_bigram_jaccard, exact_flags=name_exact, chunk_size=chunk_size
     )
     features_df['name_jaccard'] = _compute_series_similarity(
-        s1_name, cand_name, fast_jaccard, exact_flags=name_exact, chunk_size=200_000
+        s1_name, cand_name, fast_jaccard, exact_flags=name_exact, chunk_size=chunk_size
     )
 
     print("Computing Address Features (Fast Heuristics)...")
@@ -84,10 +89,10 @@ def generate_pair_features(pairs_df: pd.DataFrame, df_source1: pd.DataFrame, df_
     address_exact = (s1_address == cand_address)
     features_df['address_exact'] = address_exact.astype(float)
     features_df['address_edit_sim'] = _compute_series_similarity(
-        s1_address, cand_address, fast_char_bigram_jaccard, exact_flags=address_exact, chunk_size=200_000
+        s1_address, cand_address, fast_char_bigram_jaccard, exact_flags=address_exact, chunk_size=chunk_size
     )
     features_df['address_jaccard'] = _compute_series_similarity(
-        s1_address, cand_address, fast_jaccard, exact_flags=address_exact, chunk_size=200_000
+        s1_address, cand_address, fast_jaccard, exact_flags=address_exact, chunk_size=chunk_size
     )
 
     print("Computing Country Features...")

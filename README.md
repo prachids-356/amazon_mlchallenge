@@ -48,8 +48,9 @@ This pipeline was engineered to maximize the **F0.5 Score** (which heavily penal
 ### 2. Candidate Generation (Blocking)
 Doing a raw cross-join across 3 sources creates a memory-crashing Cartesian explosion $O(N \times M)$. To bypass this, we utilize a two-pronged blocking strategy to build a high-recall candidate set:
 * **Rule A (Exact Match)**: Joins strictly on `Name == Name AND Address == Address`.
-* **Rule B (Smart Multi-Key)**: Blocks on a composite key of `Country + First 4 Name Characters + First Address Token`. This acts as a net to catch suffix typos or missing middle words without generating billions of pairs for common words like "The" or "Amazon".
-* **Deduplication**: Candidates from both blocks are unioned, and duplicates are dropped.
+* **Rule B (Name-Token Blocking)**: Joins records sharing the first normalized name token, expanding recall for renamed or incomplete business names.
+* **Rule C (Smart Multi-Key)**: Blocks on `Country + First 4 Name Characters + First Address Token`, catching suffix typos or missing middle words while limiting collisions.
+* **Deduplication**: Candidates from all three blocks are unioned and duplicate entity pairs are dropped.
 
 ### 3. Feature Engineering
 Standard text similarity libraries (like Python's `difflib.SequenceMatcher`) evaluate at ~$O(K^2)$ per string pair, taking ~45+ minutes on 1.5GB datasets.
@@ -80,3 +81,14 @@ Use the values printed by this run in a project report or LinkedIn post. Report 
 For this challenge, **F0.5 is the primary metric** because it gives more weight to precision and penalizes incorrect business merges. Accuracy is a secondary pair-level metric and should not be presented as the overall challenge score.
 
 The repository also includes a sample benchmark under `benchmarks/` showing candidate-generation and feature-generation timing. Those runtime measurements are separate from model quality metrics.
+
+The recorded sample benchmark uses the first 200 training rows from each source:
+
+| Measurement | Result |
+|---|---:|
+| Candidate pairs | 47 |
+| Candidate-generation time | 1.00 second |
+| Feature-generation time | 0.19 seconds |
+| Feature rows | 47 |
+
+These are reproducible sample measurements, not full-dataset accuracy or full-dataset runtime.

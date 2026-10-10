@@ -58,23 +58,24 @@ def benchmark_candidate_generation(sample_size: int = 1000):
         print(counts)
         summary['blocking_rule_counts'] = counts
 
-    return total, summary
+    return total, summary, s1, s2, s3
 
 
-def benchmark_feature_generation(sample_pairs: pd.DataFrame, chunk_size: int = 200_000):
+def benchmark_feature_generation(
+    sample_pairs: pd.DataFrame,
+    s1: pd.DataFrame,
+    s2: pd.DataFrame,
+    s3: pd.DataFrame,
+    chunk_size: int = 200_000,
+):
     if sample_pairs.empty:
         print("No sample pairs to benchmark.")
         return {'feature_generation_time_seconds': 0.0, 'feature_rows': 0, 'columns': []}
 
-    data = load_train_data()
-    s1 = _ensure_normalized_columns(data['source1'].copy())
-    s23 = pd.concat([
-        _ensure_normalized_columns(data['source2'].copy()),
-        _ensure_normalized_columns(data['source3'].copy())
-    ], ignore_index=True)
+    s23 = pd.concat([s2, s3], ignore_index=True)
 
     start = time.time()
-    features = generate_pair_features(sample_pairs, s1, s23)
+    features = generate_pair_features(sample_pairs, s1, s23, chunk_size=chunk_size)
     elapsed = time.time() - start
 
     print(f"Feature generation time: {elapsed:.2f}s")
@@ -112,8 +113,8 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     bench_dir = Path(args.output_dir)
-    sample_pairs, candidate_summary = benchmark_candidate_generation(sample_size=args.sample_size)
-    feature_summary = benchmark_feature_generation(sample_pairs, chunk_size=args.chunk_size)
+    sample_pairs, candidate_summary, s1, s2, s3 = benchmark_candidate_generation(sample_size=args.sample_size)
+    feature_summary = benchmark_feature_generation(sample_pairs, s1, s2, s3, chunk_size=args.chunk_size)
 
     combined_summary = {
         **candidate_summary,

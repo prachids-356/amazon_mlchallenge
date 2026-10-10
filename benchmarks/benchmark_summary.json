@@ -2,7 +2,7 @@
   "blocking_rule_counts": {
     "name_first_token": 47
   },
-  "candidate_generation_time_seconds": 0.3045,
+  "candidate_generation_time_seconds": 0.9955,
   "chunk_size": 50000,
   "columns": [
     "source1_entity_id",
@@ -23,7 +23,7 @@
     "address_jaccard",
     "country_match"
   ],
-  "feature_generation_time_seconds": 13.8017,
+  "feature_generation_time_seconds": 0.189,
   "feature_rows": 47,
   "sample_size": 200,
   "source2_candidates": 29,

@@ -3,9 +3,9 @@ sample_size,200
 source2_candidates,29
 source3_candidates,18
 total_candidates,47
-candidate_generation_time_seconds,0.3045
+candidate_generation_time_seconds,0.9955
 blocking_rule_counts,{'name_first_token': 47}
-feature_generation_time_seconds,13.8017
+feature_generation_time_seconds,0.189
 feature_rows,47
 columns,"['source1_entity_id', 'candidate_entity_id', 'candidate_source', 'blocking_rule', 's1_name', 's1_address', 's1_country', 'cand_name', 'cand_address', 'cand_country', 'name_exact', 'name_edit_sim', 'name_jaccard', 'address_exact', 'address_edit_sim', 'address_jaccard', 'country_match']"
 chunk_size,50000
