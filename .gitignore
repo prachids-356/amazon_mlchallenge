@@ -1,16 +1,43 @@
-# Dataset files (Too large for GitHub)
+# Dataset files (too large for GitHub)
 data/
 *.tsv
-!output/*.tsv
 
-# Logs and OS files
-output_log.txt
-__MACOSX/
-.DS_Store
-
-# Python caches
+# Python
 __pycache__/
-*.pyc
+*.py[cod]
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
 
-# Zip files
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Secrets and local configuration
+.env
+.env.*
+!.env.example
+
+# IDE and OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+__MACOSX/
+
+# Logs and generated files
+output_log.txt
 *.zip
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Generated outputs
+output/*.tsv
+
+# data/interim/
+
+# data/processed/
